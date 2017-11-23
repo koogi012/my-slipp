@@ -54,35 +54,66 @@ public class QuestionController {
 		
 		return "redirect:/";
 	}
+	
+	private boolean hasPermission( HttpSession session, Question question ) {
 
-	@GetMapping("/{id}/form")
-	public String updateForm(@PathVariable Long id, Model model ) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
+			throw new IllegalStateException("로그인이 필요합니다.");
+		}
 		
-		model.addAttribute("question", questionRepository.findOne(id));
-		
-		return "/qna/updateForm";
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		if ( !question.isSameWriter(loginUser) ) {
+			throw new IllegalStateException("자신이 쓴 글만 수정, 삭제가 가능합니다.");
+		}		
+
+		return true;
 	}
 
+	@GetMapping("/{id}/form")
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session ) {
+		try {
+			Question question = questionRepository.findOne(id);
+			hasPermission( session, question );
+
+			model.addAttribute("question", question);
+			return "/qna/updateForm";				
+
+		} catch (IllegalStateException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "/user/login";
+		}
+	}
+	
 	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, String title, String contents ) {
-		
-		Question question = questionRepository.findOne(id);
-		
-		question.update(title, contents);
-		
-		questionRepository.save(question);
-		
-		return String.format("redirect:/questions/%d", id);
+	public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session ) {
+		try {
+			Question question = questionRepository.findOne(id);
+			hasPermission( session, question );
+
+			question.update(title, contents);
+			questionRepository.save(question);
+			return String.format("redirect:/questions/%d", id);
+
+		} catch (IllegalStateException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "/user/login";
+		}
 	}
 	
 	@DeleteMapping("/{id}")
-	public String delete(@PathVariable Long id) {
+	public String delete(@PathVariable Long id, Model model, HttpSession session ) {
 		
-		Question question = questionRepository.findOne(id);
-		
-		questionRepository.delete(question);
+		try {
+			Question question = questionRepository.findOne(id);
+			hasPermission( session, question );
 
-		return "redirect:/";
+			questionRepository.delete(question);
+			return "redirect:/";
+
+		} catch (IllegalStateException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "/user/login";
+		}		
 	}
 	
 	

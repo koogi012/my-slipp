@@ -1,2 +1,4 @@
-INSERT INTO USER( USER_ID, PASSWORD, NAME, EMAIL ) VALUES ( 'koogi012', '1234', '이용기', 'koogi012@gmail.com');
-INSERT INTO USER( USER_ID, PASSWORD, NAME, EMAIL ) VALUES ( 'test', '1234', '이용기', 'koogi012@gmail.com');
+INSERT INTO USER( ID, USER_ID, PASSWORD, NAME, EMAIL ) VALUES ( 1, 'koogi012', '1234', '이용기', 'koogi012@gmail.com');
+INSERT INTO USER( ID, USER_ID, PASSWORD, NAME, EMAIL ) VALUES ( 2, 'test', '1234', '이용기', 'koogi012@gmail.com');
+INSERT INTO QUESTION( ID, WRITER_ID, TITLE, CONTENTS, CREATE_DATE ) VALUES ( 1, 1, 'JPA에 대한 의문', 'H2 데이터베이스 이외에 다른 RDBMS에서도 사용이 가능한것인가?', CURRENT_TIMESTAMP() );
+INSERT INTO QUESTION( ID, WRITER_ID, TITLE, CONTENTS, CREATE_DATE ) VALUES ( 2, 2, 'SPRING BOOT에 대한 노력', '조금더 시간을 할애해야 할것 같은데', CURRENT_TIMESTAMP() );
