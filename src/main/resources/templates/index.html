@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
-<head>
-	{{> /include/header}}
+<head>{{> /include/header}}
 </head>
 
 <body>
@@ -12,22 +11,22 @@
 		<div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
 			<div class="panel panel-default qna-list">
 				<ul class="list">
+					{{#questions}}
 					<li>
 						<div class="wrap">
-							{{#questions}}
 							<div class="main">
 								<strong class="subject"> <a href="/questions/{{id}}">{{title}}</a>
 								</strong>
 								<div class="auth-info">
-									<i class="icon-add-comment"></i> <span class="time">{{formattedCreateDate}}</span> <a href="./user/profile.html" class="author">{{writer.userId}}</a>
+									<i class="icon-add-comment"></i> <span class="time">{{formattedCreateDate}}</span>
+									<a href="./user/profile.html" class="author">{{writer.userId}}</a>
 								</div>
 								<div class="reply" title="댓글">
-									<i class="icon-reply"></i> <span class="point">8</span>
+									<i class="icon-reply"></i> <span class="point">{{countOfAnswer}}</span>
 								</div>
 							</div>
-							{{/questions}}
 						</div>
-					</li>
+					</li> {{/questions}}
 				</ul>
 				<div class="row">
 					<div class="col-md-3"></div>
@@ -52,7 +51,7 @@
 	</div>
 
 	<!--login modal-->
-<!-- 
+	<!-- 
 <div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
   <div class="modal-content">
